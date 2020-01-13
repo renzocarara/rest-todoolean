@@ -48,6 +48,15 @@ $(document).ready(function() {
         updateTodo($(this));
     });
 
+    // intercetto pressione ENTER, anzichè click sul icona upload, per aggiornare un TODO
+    $('#todo-list').on('keypress', '.modify-todo-input', function(event) {
+        if (event.which == 13) { // è stato premuto tasto ENTER (codice 13)
+            console.log("dentro if");
+            // chiamo una funzione per aggiornare il TODO
+            updateTodo($(this));
+        }
+    });
+
 });
 
 // ---------------------------- FUNCTIONs --------------------------------------
