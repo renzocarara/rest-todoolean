@@ -32,8 +32,13 @@ $(document).ready(function() {
 
     //intercetto click su icona cancellazione
     $('#todo-list').on('click', '.delete-todo', function() {
-        // chiamo una funzione per cancellare il 'todo'
-        deleteTodo($(this));
+
+        // chiedo conferma della volontà dell'utente di cancellare il TODO
+        var answer = confirm("Operazione irreversibile. Confermi la cancellazione?");
+        if (answer == true) {
+            // chiamo una funzione per cancellare il 'todo'
+            deleteTodo($(this));
+        }
     });
 
     //intercetto click su icona edit
@@ -60,7 +65,6 @@ $(document).ready(function() {
     // catturo l'evento "keyup" nel campo input di modifica TODO
     // per modificare il colore dell'icona di upload nel caso ci sia un valore valido da uploadare
     $('#add-todo-input').keyup(function() {
-        console.log("keyup");
 
         // recupero il testo contenuto nel campo di edit
         var todoToBeCreatedText = $('#add-todo-input').val().trim();

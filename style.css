@@ -47,10 +47,6 @@ i {
     margin: 0 auto;
 }
 
-.hidden {
-    display: none
-}
-
 #add-todo-input {
     font-size: 18px;
     padding: 5px 5px;
@@ -127,4 +123,11 @@ i {
 
 .green {
     color: green;
+}
+
+.delete-todo-confirm {
+    width: 200px;
+    height: 100px;
+    border-radius: 5px;
+    border: 1px solid lightgray;
 }
