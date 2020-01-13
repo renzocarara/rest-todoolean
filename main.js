@@ -6,10 +6,8 @@
 // la cancellazione di un todo.
 // BONUS: gestire la modifica di un todo.
 // -----------------------------------------------------------------------------
-
+// url base per accedere alle API
 var urlTodoList = "http://157.230.17.132:3004/todos/";
-
-var initialMoment = moment(); // data corrente
 
 $(document).ready(function() {
 
@@ -51,7 +49,6 @@ $(document).ready(function() {
     // intercetto pressione ENTER, anzichè click sul icona upload, per aggiornare un TODO
     $('#todo-list').on('keypress', '.modify-todo-input', function(event) {
         if (event.which == 13) { // è stato premuto tasto ENTER (codice 13)
-            console.log("dentro if");
             // chiamo una funzione per aggiornare il TODO
             updateTodo($(this));
         }
@@ -81,12 +78,12 @@ function readAndDisplayTodoList() {
 function displayTodoList(todoList) {
     // DESCRIZIONE:
     // visualizza la TODO list in pagina
+    // usa un template HANDLEBARS
 
     // cancello dalla pagina la lista precedente
     $('#todo-list').empty();
 
-    // ciclo sull'array ricevuto come parametro in ingresso alla funzione
-    // che contiene la lista dei TODOs
+    // ciclo sull'array che contiene la lista dei TODOs (parametro in ingresso alla funzione)
     for (var i = 0; i < todoList.length; i++) {
 
         // oggetto per HANDLEBARS
@@ -114,12 +111,10 @@ function createTodo() {
     // recupero il valore del campo di input eliminando gli eventuali spazi iniziali e finali
     var todoInput = $('#add-todo-input').val().trim();
 
-    // console.log("todoInput", todoInput);
     if (todoInput) {
 
         // resetto campo di input
         $('#add-todo-input').val('');
-
         // preparo l'oggetto da scrivere sul DB e da passare alla chiamata AJAX in POST
         var todoObj = {
             'text': todoInput
@@ -149,17 +144,14 @@ function deleteTodo(that) {
     // fa una chiammata AJAX con metodo DELETE per cancellare il TODO cliccato dall'utente
     // riceve in ingresso il riferimento dell'elemento cliccato (l'icona trash a fianco del TODO)
 
-    console.log("sono nella delete");
-    // ricavo l'id dell'elemento da cancellare, tramite l'attributo 'data-todo-id'
+    // ricavo l'id del TODO da cancellare, tramite l'attributo 'data-todo-id'
     // l'attributo è associato all'elemento padre dell'elemento cliccato
-    var todoIdToBeDeleted = that.parent().attr('data-todo-id');
-    // console.log("todoIdToBeDeleted", todoIdToBeDeleted);
+    var todoToBeDeletedId = that.parent().attr('data-todo-id');
 
     $.ajax({
-        url: urlTodoList + todoIdToBeDeleted,
+        url: urlTodoList + todoToBeDeletedId,
         method: 'delete',
         success: function(data) {
-            // console.log("data in risposta a delete", data);
             // visualizzo i dati aggiornati dopo l'inserimento del nuovo TODO
             readAndDisplayTodoList();
         },
@@ -173,50 +165,57 @@ function deleteTodo(that) {
 
 function editTodo(that) {
     // DESCRIZIONE:
-    // gestisce il click sull'icona per modificare un TODO
+    // gestisce il click sull'icona per modificare un TODO,
+    // visualizza/nasconde gli elementi della lista di TODOs
+    // fa apparire un campo di input per modificare il testo e un'icona per fare l'upload,
+    // controlla se c'è già un TODO selezionato per l'edit,
+    // permette l'edit di un solo TODO per volta
 
     // nel caso ci fosse, un altro TODO che è già 'in fase di edit' (cioè precedentemente cliccato)
     // riporto tutti i TODOs in uno stato iniziale pre 'fase di edit'
-    $('.upload-todo').removeClass('visible');
-    $('.modify-todo-input').removeClass('visible');
+    $('.upload-todo, .modify-todo-input').removeClass('visible');
     // setto tutti i TODO e relative icone come 'non in fase di edit'
-    $('.todo-text').removeClass('hidden');
-    $('.delete-todo').removeClass('hidden');
-    $('.edit-todo').removeClass('hidden');
+    $('.todo-text, .delete-todo, .edit-todo').removeClass('hidden');
 
-    // recupero il testo del TODo da editare
-    var todoText = that.parent().find('.todo-text').text();
+    // recupero il riferimento al TODO da aggiornare
+    var todoToBeEdited = that.parent();
+
+    // recupero il testo del TODo da editare (scelto dal'utente)
+    var todoText = todoToBeEdited.find('.todo-text').text();
     // trovo il TODO associato all'icona di 'modifica' cliccata e lo nascondo
-    that.parent().find('.todo-text').addClass('hidden');
+    todoToBeEdited.find('.todo-text').addClass('hidden');
     // nascondo l'icona di cancellazione
-    that.parent().find('.delete-todo').addClass('hidden');
+    todoToBeEdited.find('.delete-todo').addClass('hidden');
     // nascondo l'icona di modifica
-    that.parent().find('.edit-todo').addClass('hidden');
+    todoToBeEdited.find('.edit-todo').addClass('hidden');
     // visualizzo icona di upload
-    that.parent().find('.upload-todo').addClass('visible');
+    todoToBeEdited.find('.upload-todo').addClass('visible');
     // valorizzo e visualizzo il campo di input per permettere all'utente di inserire la modifica
-    that.parent().find('.modify-todo-input').val(todoText).addClass('visible');
+    todoToBeEdited.find('.modify-todo-input').val(todoText).addClass('visible');
 
 } // end function editTodo()
 
 
-function updateTodo(that, newTodo) {
+function updateTodo(that) {
     // DESCRIZIONE:
     // fa una chiamata AJAX con metodo PUT per aggiornare un TODO della lista,
     // in base all'input inserito dall'utente
 
+    // recupero il riferimento al TODO da aggiornare
+    var todoToBeUpdated = that.parent();
+
     // recupero il testo contenuto nel campo di edit
-    var modifiedTodoText = that.parent().find('.modify-todo-input').val().trim();
+    var todoToBeUpdatedText = todoToBeUpdated.find('.modify-todo-input').val().trim();
 
     // ricavo l'id dell'elemento da aggiornare, tramite l'attributo 'data-todo-id'
     // l'attributo è associato all'elemento padre dell'elemento cliccato
-    var todoToBeUpdatedId = that.parent().attr('data-todo-id');
+    var todoToBeUpdatedId = todoToBeUpdated.attr('data-todo-id');
 
-    if (modifiedTodoText) {
+    if (todoToBeUpdatedText) {
 
         // preparo l'oggetto da scrivere sul DB e da passare alla chiamata AJAX in PUT
         var todoObj = {
-            'text': modifiedTodoText
+            'text': todoToBeUpdatedText
         };
 
         $.ajax({
