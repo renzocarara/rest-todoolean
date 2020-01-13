@@ -79,3 +79,7 @@ input:focus, button:focus {
 .todo-list-item {
     padding: 5px;
 }
+
+.clickable {
+    cursor: pointer;
+}

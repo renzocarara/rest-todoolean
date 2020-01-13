@@ -31,7 +31,7 @@ $(document).ready(function() {
     }); // fine evento keypress tasto ENTER
 
     //intercetto click su icona cancellazione
-    $('').on('click', '', function() {
+    $('#todo-list').on('click', '.delete-todo', function() {
         // chiamo una funzione per cancellare il 'todo'
         deleteTodo($(this));
     }); // fine evento click su icona cancellazione
@@ -111,7 +111,7 @@ function createTodo() {
         // resetto campo di input
         $('#add-todo-input').val('');
 
-        // preparo l'oggetto da scrivere sul DB e da  passare alla chiamata AJAX in POST
+        // preparo l'oggetto da scrivere sul DB e da passare alla chiamata AJAX in POST
         var todoObj = {
             'text': todoInput
         };
@@ -137,7 +137,27 @@ function createTodo() {
 
 function deleteTodo(that) {
     // DESCRIZIONE:
-    //
+    // fa una chiammata AJAX con metodo DELETE per cancellare il TODO cliccato dall'utente
+    // riceve in ingresso il riferimento dell'elemento cliccato (l'icona trash a fianco del TODO)
+
+    console.log("sono nella delete");
+    // ricovo l'id dell'elemento da cancellare, tramite l'attributo 'data-todo-id'
+    // l'attributo è associato all'elemento padre dell'elemento cliccato
+    var todoIdToBeDeleted = that.parent().attr('data-todo-id');
+    // console.log("todoIdToBeDeleted", todoIdToBeDeleted);
+
+    $.ajax({
+        url: urlTodoList + todoIdToBeDeleted,
+        method: 'delete',
+        success: function(data) {
+            // console.log("data in risposta a delete", data);
+            // visualizzo i dati aggiornati dopo l'inserimento del nuovo TODO
+            readAndDisplayTodoList();
+        },
+        error: function() {
+            alert("ERRORE! C'è stato un problema nell'accesso ai dati");
+        }
+    });
 
 } // end function deleteTodo()
 
