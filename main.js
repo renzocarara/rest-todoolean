@@ -44,7 +44,7 @@ $(document).ready(function() {
 
     //intercetto click su icona salva
     $('#todo-list').on('click', '.upload-todo', function() {
-        // chiamo una funzione
+        // chiamo una funzione per aggiornare il TODO
         updateTodo($(this));
     });
 
@@ -141,7 +141,7 @@ function deleteTodo(that) {
     // riceve in ingresso il riferimento dell'elemento cliccato (l'icona trash a fianco del TODO)
 
     console.log("sono nella delete");
-    // ricovo l'id dell'elemento da cancellare, tramite l'attributo 'data-todo-id'
+    // ricavo l'id dell'elemento da cancellare, tramite l'attributo 'data-todo-id'
     // l'attributo è associato all'elemento padre dell'elemento cliccato
     var todoIdToBeDeleted = that.parent().attr('data-todo-id');
     // console.log("todoIdToBeDeleted", todoIdToBeDeleted);
@@ -188,17 +188,34 @@ function updateTodo(that, newTodo) {
     // fa una chiamata AJAX con metodo PUT per aggiornare un TODO della lista,
     // in base all'input inserito dall'utente
 
-    // $.ajax({
-    //     url: urlTodoList + todoIdToBeDeleted,
-    //     method: 'put',
-    //     success: function(data) {
-    //         // console.log("data in risposta a delete", data);
-    //         // visualizzo i dati aggiornati dopo l'inserimento del nuovo TODO
-    //         readAndDisplayTodoList();
-    //     },
-    //     error: function() {
-    //         alert("ERRORE! C'è stato un problema nell'accesso ai dati");
-    //     }
-    // });
+    // recupero il testo contenuto nel campo di edit
+    var modifiedTodoText = that.parent().find('.modify-todo-input').val().trim();
 
+    // ricavo l'id dell'elemento da aggiornare, tramite l'attributo 'data-todo-id'
+    // l'attributo è associato all'elemento padre dell'elemento cliccato
+    var todoToBeUpdatedId = that.parent().attr('data-todo-id');
+
+    if (modifiedTodoText) {
+
+        // preparo l'oggetto da scrivere sul DB e da passare alla chiamata AJAX in PUT
+        var todoObj = {
+            'text': modifiedTodoText
+        };
+
+        $.ajax({
+            url: urlTodoList + todoToBeUpdatedId,
+            method: 'put',
+            data: todoObj,
+            success: function(data) {
+                // visualizzo i dati aggiornati
+                readAndDisplayTodoList();
+            },
+            error: function() {
+                alert("ERRORE! C'è stato un problema nell'accesso ai dati");
+            }
+        });
+
+    } else {
+        alert("Il campo editato è vuoto!");
+    }
 } // end function updateTodo()
