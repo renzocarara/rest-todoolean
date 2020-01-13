@@ -38,6 +38,10 @@ input:focus, button:focus {
     outline: none;
 }
 
+i {
+    margin-right: 10px;
+}
+
 .container {
     max-width: 1170px;
     margin: 0 auto;
@@ -58,8 +62,8 @@ input:focus, button:focus {
 
 #add-todo-button {
     cursor: pointer;
-    background-color: coral;
     color: white;
+    background-color: orange;
     font-size: 18px;
     padding: 5px 8px;
     width: 120px;
@@ -68,10 +72,13 @@ input:focus, button:focus {
     border: 1px solid lightgray;
 }
 
-#add-todo-button:hover {
+#add-todo-button.bg-green {
     background-color: green;
 }
 
+/* #add-todo-button.bg-orange {
+    background-color: orange;
+} */
 #add-bar {
     margin-bottom: 30px;
 }
@@ -93,10 +100,31 @@ input:focus, button:focus {
     display: none;
 }
 
+.modify-todo-input {
+    font-size: 14px;
+    padding: 2px 5px;
+    width: 200px;
+    border-style: none;
+    border-radius: 5px;
+    border: 1px solid lightgray;
+}
+
 .visible {
     display: inline-block;
 }
 
 .hidden {
     display: none;
+}
+
+.edit-todo:hover {
+    color: orange;
+}
+
+.delete-todo:hover {
+    color: red;
+}
+
+.green {
+    color: green;
 }

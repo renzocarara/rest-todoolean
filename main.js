@@ -14,6 +14,8 @@ $(document).ready(function() {
     // acquisico la lista iniziale dei TODOs e la visualizzo
     readAndDisplayTodoList();
 
+    // $('#add-todo-button').addClass('bg-orange');
+
     //intercetto click sul bottone 'Aggiungi'
     $('#add-todo-button').click(function() {
         // chiamo una funzione per inserire il nuovo TODO
@@ -54,7 +56,42 @@ $(document).ready(function() {
         }
     });
 
-});
+
+    // catturo l'evento "keyup" nel campo input di modifica TODO
+    // per modificare il colore dell'icona di upload nel caso ci sia un valore valido da uploadare
+    $('#add-todo-input').keyup(function() {
+        console.log("keyup");
+
+        // recupero il testo contenuto nel campo di edit
+        var todoToBeCreatedText = $('#add-todo-input').val().trim();
+        // verifco che il campo input abbia un valore
+        if (todoToBeCreatedText) {
+            // cambio colore al bottone 'Aggiungi'
+            $('#add-todo-button').addClass('bg-green');
+        } else {
+            // ripristino colore originale del bottone 'Aggiungi'
+            $('#add-todo-button').removeClass('bg-green');
+        }
+    });
+
+    // catturo l'evento "keyup" nel campo input di modifica TODO
+    // per modificare il colore dell'icona di upload nel caso ci sia un valore valido da uploadare
+    $('#todo-list').on('keyup', '.modify-todo-input', function() {
+        // recupero il riferimento al TODO da aggiornare
+        var todoToBeUpdated = $(this).parent();
+        // recupero il testo contenuto nel campo di edit
+        var todoToBeUpdatedText = todoToBeUpdated.find('.modify-todo-input').val().trim();
+        // verifco che il campo input abbia un valore
+        if (todoToBeUpdatedText) {
+            // cambio colore all'icona di upload
+            todoToBeUpdated.find('.upload-todo').addClass('green');
+        } else {
+            // ripristino colore icona di upload
+            todoToBeUpdated.find('.upload-todo').removeClass('green');
+        }
+    });
+
+}); // end document ready
 
 // ---------------------------- FUNCTIONs --------------------------------------
 
@@ -115,6 +152,9 @@ function createTodo() {
 
         // resetto campo di input
         $('#add-todo-input').val('');
+        // resetto colore originale del bottone 'Aggiungi'
+        $('#add-todo-button').removeClass('bg-green');
+
         // preparo l'oggetto da scrivere sul DB e da passare alla chiamata AJAX in POST
         var todoObj = {
             'text': todoInput
@@ -171,14 +211,16 @@ function editTodo(that) {
     // controlla se c'è già un TODO selezionato per l'edit,
     // permette l'edit di un solo TODO per volta
 
+    // recupero il riferimento al TODO da aggiornare
+    var todoToBeEdited = that.parent();
+
     // nel caso ci fosse, un altro TODO che è già 'in fase di edit' (cioè precedentemente cliccato)
     // riporto tutti i TODOs in uno stato iniziale pre 'fase di edit'
     $('.upload-todo, .modify-todo-input').removeClass('visible');
     // setto tutti i TODO e relative icone come 'non in fase di edit'
     $('.todo-text, .delete-todo, .edit-todo').removeClass('hidden');
-
-    // recupero il riferimento al TODO da aggiornare
-    var todoToBeEdited = that.parent();
+    // setto colore dell'icona di upload
+    todoToBeEdited.find('.upload-todo').addClass('green');
 
     // recupero il testo del TODo da editare (scelto dal'utente)
     var todoText = todoToBeEdited.find('.todo-text').text();

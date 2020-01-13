@@ -16,14 +16,14 @@
     </head>
 
     <header class="container">
-        <h1><i class="fas fa-list-ul"></i>&nbsp;Lista TODOs</h1>
+        <h1><i class="fas fa-list-ul"></i>Lista TODOs</h1>
     </header>
 
     <main class="container">
 
         <div id="add-bar">
             <input id="add-todo-input" placeholder="Inserisci il nuovo ToDo..." type="text" maxlength="100">
-            <button id="add-todo-button"><i class="fas fa-plus">&nbsp;</i>Aggiungi</button>
+            <button id="add-todo-button"><i class="fas fa-plus"></i>Aggiungi</button>
         </div>
 
         <!-- <div id="todo-list-container"> -->
@@ -34,10 +34,10 @@
 
     <script id="todo-list-template" type="text/x-handlebars-template">
         <li class="todo-list-item" data-todo-id="{{ todo-id }}">
-            <span class="edit-todo"><i class="fas fa-edit clickable">&nbsp;&nbsp;</i></span>
-            <span class="delete-todo"><i class="fas fa-trash-alt clickable">&nbsp;</i></span>
+            <span class="edit-todo"><i class="fas fa-edit clickable"></i></span>
+            <span class="delete-todo"><i class="fas fa-trash-alt clickable"></i></span>
             <span class="todo-text">{{ todo-text }}</span>
-            <span class="upload-todo"><i class="fas fa-cloud-upload-alt clickable"></i></span>
+            <span class="upload-todo green"><i class="fas fa-cloud-upload-alt clickable"></i></span>
             <input class="modify-todo-input" type="text" maxlength="100">
         </li>
     </script>
