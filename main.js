@@ -7,7 +7,7 @@
 // BONUS: gestire la modifica di un todo.
 // -----------------------------------------------------------------------------
 
-var urlTodo = "https:157.230.17.132:3004/todos/";
+var urlTodoList = "http://157.230.17.132:3004/todos/";
 
 var initialMoment = moment(); // data corrente
 
@@ -16,8 +16,8 @@ $(document).ready(function() {
     // acquisico la lista iniziale dei TODOs e la visualizzo
     readAndDisplayTodoList();
 
-    //intercetto click sul bottone 'Inserisci'
-    $('').click(function() {
+    //intercetto click sul bottone 'Aggiungi'
+    $('#add-todo-button').click(function() {
         // chiamo una funzione per inserire il nuovo 'todo'
         createTodo();
     }); // fine evento click su bottone
@@ -55,13 +55,13 @@ $(document).ready(function() {
 function readAndDisplayTodoList() {
     // DESCRIZIONE:
     // tramite chiamata AJAX recupera la TODO list
+    // chiama poi una funzione per visualizzare la lista in pagina
 
     $.ajax({
-        // url: urlTodo,
-        url: 'http://157.230.17.132:3004/todos',
+        url: urlTodoList,
         method: 'get',
         success: function(data) {
-            displayTodo(data);
+            displayTodoList(data);
         },
         error: function() {
             alert("ERRORE! C'è stato un problema nell'accesso ai dati");
@@ -69,16 +69,21 @@ function readAndDisplayTodoList() {
     });
 }
 
-function displayTodo(data) {
+function displayTodoList(todoList) {
     // DESCRIZIONE:
     // visualizza la TODO list in pagina
 
-    for (var i = 0; i < data.length; i++) {
+    // cancello dalla pagina la lista precedente
+    $('#todo-list').empty();
+
+    // ciclo sull'array ricevuto come parametro in ingresso alla funzione
+    // che contiene la lista dei TODOs
+    for (var i = 0; i < todoList.length; i++) {
 
         // oggetto per HANDLEBARS
         var context = {
-            'todo-id': data[i].id,
-            'todo-text': data[i].text
+            'todo-id': todoList[i].id,
+            'todo-text': todoList[i].text
         };
         // recupero il codice html dal template HANDLEBARS
         var todoListTemplate = $('#todo-list-template').html();
@@ -89,27 +94,44 @@ function displayTodo(data) {
         // aggiungo in pagina il todo appena creato
         $('#todo-list').append(todo);
     }
-}
+
+} // end function displayTodoList()
 
 function createTodo() {
     // DESCRIZIONE:
-    //
-    // recupero il valore del campo di input
-    var todoInput = $('#add-todo-input').val();
+    // elabora l'input dell'utente per inserire un nuovo TODO in lista
+    // fa una chiamata AJAX con metodo POST per crere un nuovo elemento nel DB
 
-    // $.ajax({
-    //     url: urlTodo,
-    //     data: {
-    //         'year': initialMoment.year(),
-    //     },
-    //     method: 'get',
-    //     success: function(data) {
-    //         displayTodo(data);
-    //     },
-    //     error: function() {
-    //         alert("ERRORE! C'è stato un problema nell'accesso ai dati");
-    //     }
-    // });
+    // recupero il valore del campo di input eliminando gli eventuali spazi iniziali e finali
+    var todoInput = $('#add-todo-input').val().trim();
+
+    // console.log("todoInput", todoInput);
+    if (todoInput) {
+
+        // resetto campo di input
+        $('#add-todo-input').val('');
+
+        // preparo l'oggetto da scrivere sul DB e da  passare alla chiamata AJAX in POST
+        var todoObj = {
+            'text': todoInput
+        };
+
+        $.ajax({
+            url: urlTodoList,
+            method: 'post',
+            data: todoObj,
+            success: function(data) {
+                // visualizzo i dati aggiornati dopo l'inserimento del nuovo TODO
+                readAndDisplayTodoList();
+            },
+            error: function() {
+                alert("ERRORE! C'è stato un problema nell'accesso ai dati");
+            }
+        });
+
+    } else {
+        alert("Il campo di input è vuoto!");
+    }
 
 } // end function createTodo()
 
