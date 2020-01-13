@@ -175,9 +175,17 @@ function editTodo(that) {
     // DESCRIZIONE:
     // gestisce il click sull'icona per modificare un TODO
 
-    console.log("sono nella editTodo()");
-    var todoText = that.parent().find('.todo-text').text();
+    // nel caso ci fosse, un altro TODO che è già 'in fase di edit' (cioè precedentemente cliccato)
+    // riporto tutti i TODOs in uno stato iniziale pre 'fase di edit'
+    $('.upload-todo').removeClass('visible');
+    $('.modify-todo-input').removeClass('visible');
+    // setto tutti i TODO e relative icone come 'non in fase di edit'
+    $('.todo-text').removeClass('hidden');
+    $('.delete-todo').removeClass('hidden');
+    $('.edit-todo').removeClass('hidden');
 
+    // recupero il testo del TODo da editare
+    var todoText = that.parent().find('.todo-text').text();
     // trovo il TODO associato all'icona di 'modifica' cliccata e lo nascondo
     that.parent().find('.todo-text').addClass('hidden');
     // nascondo l'icona di cancellazione

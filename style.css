@@ -76,6 +76,11 @@ input:focus, button:focus {
     margin-bottom: 30px;
 }
 
+#todo-list {
+    width: 380px;
+    margin-left: 30px;
+}
+
 .todo-list-item {
     padding: 5px;
 }
