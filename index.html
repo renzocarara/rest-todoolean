@@ -34,12 +34,11 @@
 
     <script id="todo-list-template" type="text/x-handlebars-template">
         <li class="todo-list-item" data-todo-id="{{ todo-id }}">
-            <i class="fas fa-edit clickable">&nbsp;&nbsp;</i>
-            <i class="fas fa-trash-alt clickable delete-todo">&nbsp;</i>
-            <span>{{ todo-text }}</span>
-            <div class="update-todo-bar hidden">
-                <i class="fas fa-cloud-upload-alt clickable"></i><input class="update-todo-input" type="text">
-            </div>
+            <span class="edit-todo"><i class="fas fa-edit clickable">&nbsp;&nbsp;</i></span>
+            <span class="delete-todo"><i class="fas fa-trash-alt clickable">&nbsp;</i></span>
+            <span class="todo-text">{{ todo-text }}</span>
+            <span class="upload-todo"><i class="fas fa-cloud-upload-alt clickable"></i></span>
+            <input class="modify-todo-input" type="text">
         </li>
     </script>
 

@@ -18,9 +18,9 @@ $(document).ready(function() {
 
     //intercetto click sul bottone 'Aggiungi'
     $('#add-todo-button').click(function() {
-        // chiamo una funzione per inserire il nuovo 'todo'
+        // chiamo una funzione per inserire il nuovo TODO
         createTodo();
-    }); // fine evento click su bottone
+    });
 
     // intercetto pressione ENTER, anzichè click sul bottone, per inserire un TODO
     $('#add-todo-input').keypress(function(event) {
@@ -28,25 +28,25 @@ $(document).ready(function() {
             // chiamo una funzione per iserire il nuovo 'todo'
             createTodo();
         }
-    }); // fine evento keypress tasto ENTER
+    });
 
     //intercetto click su icona cancellazione
     $('#todo-list').on('click', '.delete-todo', function() {
         // chiamo una funzione per cancellare il 'todo'
         deleteTodo($(this));
-    }); // fine evento click su icona cancellazione
+    });
 
     //intercetto click su icona edit
-    $('').on('click', '', function() {
+    $('#todo-list').on('click', '.edit-todo', function() {
         // chiamo una funzione per gestire l'edit del 'todo'
         editTodo($(this));
-    }); // fine evento click su icona edit
+    });
 
     //intercetto click su icona salva
-    $('').on('click', '', function() {
+    $('#todo-list').on('click', '.upload-todo', function() {
         // chiamo una funzione
         updateTodo($(this));
-    }); // fine evento click su icona salva
+    });
 
 });
 
@@ -164,14 +164,41 @@ function deleteTodo(that) {
 
 function editTodo(that) {
     // DESCRIZIONE:
-    //
+    // gestisce il click sull'icona per modificare un TODO
+
+    console.log("sono nella editTodo()");
+    var todoText = that.parent().find('.todo-text').text();
+
+    // trovo il TODO associato all'icona di 'modifica' cliccata e lo nascondo
+    that.parent().find('.todo-text').addClass('hidden');
+    // nascondo l'icona di cancellazione
+    that.parent().find('.delete-todo').addClass('hidden');
+    // nascondo l'icona di modifica
+    that.parent().find('.edit-todo').addClass('hidden');
+    // visualizzo icona di upload
+    that.parent().find('.upload-todo').addClass('visible');
+    // valorizzo e visualizzo il campo di input per permettere all'utente di inserire la modifica
+    that.parent().find('.modify-todo-input').val(todoText).addClass('visible');
 
 } // end function editTodo()
 
 
-function updateTodo(that) {
+function updateTodo(that, newTodo) {
     // DESCRIZIONE:
-    //
+    // fa una chiamata AJAX con metodo PUT per aggiornare un TODO della lista,
+    // in base all'input inserito dall'utente
 
+    // $.ajax({
+    //     url: urlTodoList + todoIdToBeDeleted,
+    //     method: 'put',
+    //     success: function(data) {
+    //         // console.log("data in risposta a delete", data);
+    //         // visualizzo i dati aggiornati dopo l'inserimento del nuovo TODO
+    //         readAndDisplayTodoList();
+    //     },
+    //     error: function() {
+    //         alert("ERRORE! C'è stato un problema nell'accesso ai dati");
+    //     }
+    // });
 
 } // end function updateTodo()

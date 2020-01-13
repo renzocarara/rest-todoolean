@@ -83,3 +83,15 @@ input:focus, button:focus {
 .clickable {
     cursor: pointer;
 }
+
+.upload-todo, .modify-todo-input {
+    display: none;
+}
+
+.visible {
+    display: inline-block;
+}
+
+.hidden {
+    display: none;
+}
