@@ -59,7 +59,6 @@ $(document).ready(function() {
         }
     });
 
-
     // catturo l'evento "keyup" nel campo input di creazione di un TODO
     // per modificare il colore dell'icona di upload nel caso ci sia un valore valido da uploadare
     $('#add-todo-input').keyup(function() {
@@ -90,6 +89,24 @@ $(document).ready(function() {
         } else {
             // ripristino colore icona di upload
             todoToBeUpdated.find('.upload-todo').removeClass('green');
+        }
+    });
+
+    // intercetto click sul testo del TODO
+    $('#todo-list').on('click', '.todo-text', function() {
+
+        // ricavo l'id del TODO
+        var id = $(this).parent().attr('data-todo-id');
+
+        // verifco se il TODO ha già la classe strikethrough
+        if ($(this).hasClass('strikethrough')) {
+            // tolgo lo strikethrough
+            $(this).removeClass('strikethrough');
+            updateDoneProperty(id, "false");
+        } else {
+            // metto strikethrough
+            $(this).addClass('strikethrough');
+            updateDoneProperty(id, "true");
         }
     });
 
@@ -128,7 +145,8 @@ function displayTodoList(todoList) {
         // oggetto per HANDLEBARS
         var context = {
             'todo-id': todoList[i].id,
-            'todo-text': todoList[i].text
+            'todo-text': todoList[i].text,
+            'status': (todoList[i].done == "true") ? "strikethrough" : ""
         };
         // recupero il codice html dal template HANDLEBARS
         var todoListTemplate = $('#todo-list-template').html();
@@ -139,8 +157,30 @@ function displayTodoList(todoList) {
         // aggiungo in pagina il todo appena creato
         $('#todo-list').append(todo);
     }
-
 } // end function displayTodoList()
+
+function updateDoneProperty(id, status) {
+    // DESCRIZIONE:
+    // aggiorna sul DB la proprietà 'done' settata a "true" o "false"
+
+    var doneObj = {
+        'done': status
+    };
+
+    $.ajax({
+        url: urlTodoList + id,
+        method: 'patch',
+        data: doneObj,
+        success: function(data) {
+            // visualizzo i dati aggiornati
+            readAndDisplayTodoList();
+        },
+        error: function() {
+            alert("ERRORE! C'è stato un problema nell'accesso ai dati");
+        }
+    });
+
+} // end function updateDoneProperty
 
 function createTodo() {
     // DESCRIZIONE:
@@ -264,7 +304,7 @@ function updateTodo(that) {
 
         $.ajax({
             url: urlTodoList + todoToBeUpdatedId,
-            method: 'put',
+            method: 'patch',
             data: todoObj,
             success: function(data) {
                 // visualizzo i dati aggiornati

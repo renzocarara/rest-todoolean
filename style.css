@@ -138,3 +138,8 @@ i {
     border-radius: 5px;
     border: 1px solid lightgray;
 }
+
+.strikethrough {
+    text-decoration: line-through;
+    color: red;
+}

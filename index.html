@@ -33,7 +33,7 @@
         <li class="todo-list-item" data-todo-id="{{ todo-id }}">
             <span class="edit-todo"><i class="fas fa-edit clickable"></i></span>
             <span class="delete-todo"><i class="fas fa-trash-alt clickable"></i></span>
-            <span class="todo-text">{{ todo-text }}</span>
+            <span class="todo-text clickable {{ status }}">{{ todo-text }}</span>
             <span class="upload-todo green"><i class="fas fa-cloud-upload-alt clickable"></i></span>
             <input class="modify-todo-input" type="text" maxlength="100">
         </li>
