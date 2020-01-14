@@ -14,8 +14,6 @@ $(document).ready(function() {
     // acquisico la lista iniziale dei TODOs e la visualizzo
     readAndDisplayTodoList();
 
-    // $('#add-todo-button').addClass('bg-orange');
-
     //intercetto click sul bottone 'Aggiungi'
     $('#add-todo-button').click(function() {
         // chiamo una funzione per inserire il nuovo TODO
@@ -62,11 +60,11 @@ $(document).ready(function() {
     });
 
 
-    // catturo l'evento "keyup" nel campo input di modifica TODO
+    // catturo l'evento "keyup" nel campo input di creazione di un TODO
     // per modificare il colore dell'icona di upload nel caso ci sia un valore valido da uploadare
     $('#add-todo-input').keyup(function() {
 
-        // recupero il testo contenuto nel campo di edit
+        // recupero il testo contenuto nel campo di input
         var todoToBeCreatedText = $('#add-todo-input').val().trim();
         // verifco che il campo input abbia un valore
         if (todoToBeCreatedText) {
