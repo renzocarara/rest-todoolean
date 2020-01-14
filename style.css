@@ -113,12 +113,22 @@ i {
     display: none;
 }
 
-.edit-todo:hover {
+.edit-todo i:hover {
     color: orange;
+    transform: scale(1.33);
+    transition: 0.3s ease-in-out;
 }
 
-.delete-todo:hover {
+.delete-todo i:hover {
     color: red;
+    transform: scale(1.33);
+    transition: 0.3s ease-in-out;
+}
+
+.upload-todo i:hover {
+    color: green;
+    transform: scale(1.33);
+    transition: 0.3s ease-in-out;
 }
 
 .green {
